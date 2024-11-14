@@ -17,5 +17,6 @@ router.post(
 );
 // send mail
 router.post("/sendmail", UserController.SendMail);
+router.post("/sendmail2", UserController.SendMail2);
 
 export default router;

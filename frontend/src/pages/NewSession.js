@@ -110,6 +110,13 @@ const NewSession = ({ togglePopup }) => {
               placeholder="Time"
               autoComplete="off"
             />
+            {/* Adding email input */}
+            <input
+              type="text"
+              name="email"
+              placeholder="Email"
+              autoComplete="off"
+            />
             <select name="radius" id="radius" autoComplete="off">
               <option value="50">50 meters</option>
               <option value="75">75 meters</option>

@@ -138,12 +138,42 @@ function SendMail(req, res) {
   });
 }
 
+//send mail2
+function SendMail2(req, res) {
+  const { email, subject, message } = req.body;
+  
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.EMAIL,
+      pass: process.env.PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: subject,
+    text: message,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      res.status(400).json({ message: error.message });
+    } else {
+      console.log("Email sent: " + info.response);
+      res.status(200).json({ message: "Sent successfully", otp: otp });
+    }
+  });
+}
+
 const UserController = {
   Login,
   Signup,
   ForgotPassword,
   EditUserDetails,
   SendMail,
+  SendMail2,
 };
 
 export default UserController;

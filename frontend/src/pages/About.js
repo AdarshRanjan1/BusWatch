@@ -2,25 +2,26 @@ import React, { useState } from "react";
 import "../styles/About.css";
 import signup from "../assets/Signup.png";
 import login from "../assets/Login.png";
-import teacherd from "../assets/Teacher Dashboard.png";
-import teacherd2 from "../assets/Teacher Dashboard 2.png";
-import studentd from "../assets/student dashboard.png";
-import studentd2 from "../assets/student dashboard 2.png";
+import teacherd from "../assets/TeacherDashboard.png";
+import teacherd2 from "../assets/TeacherDashboard2.png";
+import studentd from "../assets/StudentDashboad.png";
+import studentd2 from "../assets/StudentDashboad2.png";
 import forgorPW from "../assets/Forgot pw.png";
 import qr from "../assets/QR.png";
-import newSession from "../assets/New Session.png";
-import attendance from "../assets/attendance given.png";
-import sessionInfo from "../assets/Session Info.png";
+import newSession from "../assets/NewSession.png";
+import attendance from "../assets/AttendanceGiven.png";
+import sessionInfo from "../assets/SessionInfo.png";
 import next from "../assets/next.png";
 import prev from "../assets/previous.png";
-import submitAttendance from "../assets/submit attendance.png";
+import submitAttendance from "../assets/SubmitAttendance.png";
+import lateMail from "../assets/lateMail.jpg";
 
 const assets = [
   {
     image_url: signup,
     title: "Signup",
     caption:
-      "Users have to sign up as either a teacher or a student. After signing up, they will receive an OTP on their registered email for authentication. Following this step, new users can set their passwords.",
+      "Users have to sign up as either an Admin or a Guard. After signing up, they will receive an OTP on their registered email for authentication. Following this step, new users can set their passwords.",
   },
   {
     image_url: login,
@@ -30,37 +31,37 @@ const assets = [
   },
   {
     image_url: teacherd,
-    title: "Teacher Dashboard View",
+    title: "Admin Dashboard View",
     caption:
-      "After a teacher logs in, they gain access to a feature where past attendance sessions are displayed. By clicking on these sessions, the teacher can view detailed information about each session. Additionally, there is a functionality provided for the teacher to create new attendance sessions.",
+      "After an Admin logs in, they gain access to a feature where past attendance sessions of the buses are displayed. By clicking on these sessions, the Admin can view detailed information about each bus. Additionally, there is a functionality provided for the Admin to create new attendance sessions for new buses.",
   },
   {
     image_url: newSession,
     title: "Create New Session",
     caption:
-      "Teacher can create a new session by clicking on 'New Session' button. They can set the session name, location, date, time, and the distance parameter for student attendance. The distance parameter is the maximum distance a student can be from the class location to be marked as present.",
+      "Admin can create a new session by clicking on 'Create Record' button. They can set the Bus Number, Location, Time, and the Distance Parameter for Bus Attendance. The Distance Parameter is the maximum distance a Bus can be from the Admin location to be marked as present.",
   },
   {
     image_url: qr,
     title: "QR Code Generated",
     caption:
-      "For each session created, a unique QR code is generated. This QR code is to be scanned by students to mark their attendance. The QR code is displayed on the teacher's screen during the session. This can be viewed by the teacher by clicking on the session in the dashboard.",
+      "For each bus session created, a unique QR code is generated. This QR code is to be scanned by guards to mark the attendance. The QR code is displayed on the Admin's screen during the session. This can be viewed by the Admin by clicking on the session in the dashboard.",
   },
   {
     image_url: teacherd2,
-    title: "Teacher Dashboard View after creating a session",
+    title: "Admin Dashboard View after creating a session",
     caption: "New Session is Created",
   },
   {
     image_url: studentd,
-    title: "Student Dashboard View",
-    caption: "After a student logs in, they can view their attendance history.",
+    title: "Guard Dashboard View",
+    caption: "After a Guard logs in, they can view the attendance history.",
   },
   {
     image_url: submitAttendance,
     title: "Submit Attendance",
     caption:
-      "Students can submit their attendance by scanning the QR code displayed by the teacher during the session. They have to enter their Roll number and capture a photo. The system will then mark the student as present or absent based on the distance parameter set by the teacher.",
+      "Guards can submit the attendance by scanning the QR code displayed by the Admin during the session. They have to enter the Bus Number and capture a photo. The system will then mark the Bus as present or absent based on the distance parameter set by the Admin.",
   },
   {
     image_url: attendance,
@@ -69,14 +70,20 @@ const assets = [
   },
   {
     image_url: studentd2,
-    title: "Student Dashboard View after submitting attendance",
+    title: "Guard Dashboard View after submitting attendance",
     caption: "Attendance is successfully submitted",
   },
   {
     image_url: sessionInfo,
-    title: "Session Info in Teacher Dashboard",
+    title: "Session Info in Admin Dashboard",
     caption:
-      "Upon clicking on a past session, the system presents detailed session information including a QR code, a list of attended students along with their photos taken during attendance registration, and their respective distances from the class or session location. If a student's distance exceeds the parameter set by the teacher, it will be displayed in red; otherwise, it will be shown in green.",
+      "Upon clicking on a past session, the system presents detailed session information including a QR code, a list of daily bus records along with the captured photos taken during attendance registration, and their respective distances from the Admin location. If the guard's distance exceeds the parameter set by the Admin, it will be displayed in red; otherwise, it will be shown in green.",
+  },
+  {
+    image_url: lateMail,
+    title: "Bus late mail",
+    caption:
+      "Faculty of the students who are in the late bus will get a message through email stating the bus is late.",
   },
   {
     image_url: forgorPW,

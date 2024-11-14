@@ -1,4 +1,40 @@
+/* Main logout container */
 .logout-main {
+  font-size: 28px;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background: linear-gradient(135deg, #333, #555); /* Gradient background */
+  color: #eeeeee;
+  text-align: center;
+}
+
+/* Heading or message styling */
+.logout-main h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ffd369;
+  animation: fadeIn 0.6s ease-in-out; /* Fades in the heading */
+}
+
+/* Optional additional message */
+.logout-main p {
+  font-size: 20px;
+  color: #cccccc;
+  margin-bottom: 30px;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+
+/* .logout-main {
   font-size: 30px;
   height: 100vh;
   width: 100%;
@@ -7,4 +43,4 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-}
+} */

@@ -1,4 +1,81 @@
+@keyframes fadeIn {
+  from {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent */
+  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent */
+  }
+}
+
 .form-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9;
+  background-color: #222831;
+  width: 50%;
+  max-width: 600px;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.form-popup-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.form-popup-inner > * {
+  width: 80%;
+  margin-bottom: 16px;
+}
+
+.cam-btn {
+  width: 40%;
+  border: none;
+  margin-left: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cam-btn button {
+  background-color: #00adb5;
+  color: white;
+  margin-right: 10px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.cam-btn button:hover {
+  background-color: #007b8a;
+}
+
+button[type="submit"] {
+  background-color: #00adb5;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #007b8a;
+}
+
+/* .form-popup {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -51,4 +128,4 @@ button[type="submit"] {
 
 button[type="submit"]:hover {
   background-color: #393e46;
-}
+} */

@@ -81,7 +81,7 @@ const SessionDetails = (props) => {
           </div>
         </div>
         <div className="student-list scrollable-content">
-          <p>Students Attended:</p>
+          <p>Check-ins:</p>
           <table>
             <thead>
               <tr>
@@ -104,7 +104,8 @@ const SessionDetails = (props) => {
                     <td>{student.date.split("T")[0]}</td>
                     <td>{student.student_email}</td>
                     <td>
-                      {props.currentSession[0].time}
+                      {student.time}
+                      {/* {props.currentSession[0].time} */}
                     </td>
                     <td>
                       {props.currentSession[0].location}

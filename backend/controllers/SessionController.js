@@ -99,7 +99,7 @@ async function GetQR(req, res) {
 //attend session
 async function AttendSession(req, res) {
   let tokenData = req.user;
-  let { session_id, teacher_email, regno, IP, student_email, Location, date } =
+  let { session_id, teacher_email, regno, IP, time, student_email, Location, date } =
     req.body;
   let imageName = req.file.filename;
 
@@ -115,18 +115,19 @@ async function AttendSession(req, res) {
             student.regno === regno ||
             student.student_email === student_email
           ) {
-            present = true;
+            present = false; // Earlier for giving attendence once you can make it true
           }
         });
         if (!present) {
           res.status(200).json({ message: "Attendance marked successfully" });
           await uploadImage(imageName).then((result) => {
+            const currentTime = new Date().toLocaleTimeString(); // Get the current time
             session_details = {
               session_id: session.session_id,
               teacher_email: teacher.email,
               name: session.name,
               date: session.date,
-              time: session.time,
+              time: currentTime,
               duration: session.duration,
               distance: distance,
               radius: session.radius,
@@ -137,6 +138,8 @@ async function AttendSession(req, res) {
               image: result,
               date,
               IP,
+              time,
+              // currentTime,
               student_email: tokenData.email,
               Location,
               distance,

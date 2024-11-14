@@ -11,6 +11,148 @@
   position: fixed;
   top: 50%;
   left: 50%;
+  width: 80%;
+  max-width: 1000px;
+  transform: translate(-50%, -50%);
+  background-color: #222831;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.popup-content {
+  display: flex;
+  align-items: center;
+  margin-left: 10px;
+}
+
+.popup-inner {
+  text-align: center;
+  /* color: #eee; */
+}
+
+.session-details {
+  flex: 1; /* Take remaining space */
+  margin-right: 20px;
+}
+
+.session-details p {
+  margin-bottom: 10px;
+  color: white;
+}
+
+.session-details button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #00adb5;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.session-details button:hover {
+  background-color: #007b8a;
+  transform: translateY(-2px);
+}
+
+.copybtn {
+  padding: 10px 20px;
+  background-color: #00adb5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 10px; 
+  height: 150px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #00adb5;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin: 10px; 
+}
+
+.qr-code {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 200px;
+  padding: 20px;
+  margin: 10px; 
+}
+
+.QRCode {
+  width: 200px;
+  height: 200px;
+  border: 2px solid #00adb5;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+
+.scrollable-content {
+  max-height: 300px; 
+  overflow-y: auto;
+  background: #f3f4f6;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: aliceblue;
+  border-radius: 5px;
+}
+
+th {
+  background-color: #222831;
+  color: white;
+  font-size: medium;
+}
+
+th, td {
+  padding: 10px;
+  border: 1px solid black;
+  font-size: small;
+}
+
+.copybtn:hover, button:hover {
+  background-color: #007b8a;
+  transform: translateY(-2px);
+}
+
+button:focus, .copybtn:focus {
+  outline: none;
+}
+
+
+
+/* @keyframes fadeIn {
+  from {
+    background-color: rgba(0, 0, 0, 0); /* Fully transparent */
+/*  }
+  to {
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent */
+/*  }
+}
+
+.popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
   width: 1000px;
   transform: translate(-50%, -50%);
   background-color: black;
@@ -31,7 +173,7 @@
 
 .session-details {
   flex: 1; /* Take remaining space */
-  margin-right: 20px;
+/*  margin-right: 20px;
 }
 
 .session-details p {
@@ -57,7 +199,7 @@
 
 .scrollable-content {
   max-height: 300px; /* Adjust this value as needed */
-  overflow-y: auto;
+/*  overflow-y: auto;
 }
 
 table {
@@ -102,4 +244,4 @@ button {
 
 .copybtn:hover {
   background-color: #31363f;
-}
+} */

@@ -1,5 +1,84 @@
 /* Nav.css */
 
+/* Main container for navbar */
+.nav-container {
+  background-color: #333;
+  color: #fff;
+  padding: 5px 30px;
+}
+
+/* Link styling */
+.nav-links {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 10px 15px;
+  transition: color 0.3s ease, background-color 0.3s ease;
+  border-radius: 5px; /* Rounded corners for hover effect */
+}
+
+.nav-links:hover {
+  color: #007bff;
+  background-color: #444; /* Slight background change on hover */
+}
+
+/* Removing default link styling */
+a {
+  text-decoration: none;
+  color: inherit; /* Inherit color from parent */
+}
+
+/* Navbar container */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Align items in the center vertically */
+  border-bottom: 1px solid #444; /* Darker border for contrast */
+}
+
+/* Navigation list */
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin: 0;
+}
+
+/* List item styling */
+nav li {
+  list-style-type: none;
+  margin-right: 20px;
+}
+
+/* Headings in navbar */
+h5 {
+  margin: 0;
+  font-size: 20px;
+  color: #ffd369; /* Accent color */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 10px 15px;
+  }
+
+  nav ul {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav li {
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+}
+
+
+/* Nav.css
+
 .nav-container {
   background-color: #333;
   color: #fff;
@@ -38,4 +117,4 @@ nav li {
 
 h5 {
   margin: 0;
-}
+} */

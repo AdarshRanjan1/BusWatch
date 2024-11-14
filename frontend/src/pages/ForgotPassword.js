@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import image512 from "../assets/logo512.png";
-import image192 from "../assets/logo192.png";
+// import image512 from "../assets/logo512.png";
+// import image192 from "../assets/logo192.png";
+import image512 from "../assets/DALLE_logo1.jpg";
+import image192 from "../assets/DALLE_logo2.jpg";
 import { SHA256 } from "crypto-js";
 
 const ForgotPassword = () => {
@@ -104,13 +106,13 @@ const ForgotPassword = () => {
       <div className="register-right">
         <div className="register-right-container">
           <div className="register-logo">
-            <img alt="logo" src={image192} />
+            <img alt="logo" style={{ width: "150px" }} src={image192} />
           </div>
           <div className="register-center">
             <h2>Forgot your Password?</h2>
             <form onSubmit={handleRegisterSubmit}>
               <div className="page1">
-                <p>Please enter your Email Id</p>
+                <p>Please enter your Email ID</p>
                 <input type="email" placeholder="Email" required name="email" />
                 <button type="button" onClick={toggleTwo}>
                   Send OTP
