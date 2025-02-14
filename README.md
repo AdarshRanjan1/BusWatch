@@ -26,6 +26,7 @@
 
 ## Demo Video
 https://drive.google.com/file/d/1ookbM7bEt2YEhkEH7CpLtVkrlyECrnyz/view?usp=sharing
+<a href="https://drive.google.com/file/d/1ookbM7bEt2YEhkEH7CpLtVkrlyECrnyz/view?usp=sharing" target="_blank" rel="noopener noreferrer">Watch the Demo Video</a>
 
 
 ## Screenshots
