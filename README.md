@@ -24,6 +24,10 @@
 **Database:** MongoDB
 
 
+## Demo Video
+https://drive.google.com/file/d/1ookbM7bEt2YEhkEH7CpLtVkrlyECrnyz/view?usp=sharing
+
+
 ## Screenshots
 **SignUp:** 
 Users have to sign up as either an Admin or a Guard. After signing up, they will receive an OTP on their registered email for authentication. Following this step, new users can set their passwords.
