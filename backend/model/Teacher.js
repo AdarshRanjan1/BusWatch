@@ -23,7 +23,7 @@ const userSchema = new schema(
             image: { type: String, required: true },
             IP: { type: String, required: true },
             date: { type: Date, required: true },
-            time: { type: String, required: true},
+            time: { type: String, required: true}, //added time
             student_email: { type: String, required: true },
             Location: { type: String, required: true },
             distance: { type: String, required: true },

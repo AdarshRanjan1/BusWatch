@@ -146,6 +146,7 @@ const Signup = () => {
                 <select name="type" id="type">
                   <option value="student">Guard</option>
                   <option value="teacher">Admin</option>
+                  <option value="busincharge">Bus Incharge</option>
                 </select>
                 <input
                   type="text"

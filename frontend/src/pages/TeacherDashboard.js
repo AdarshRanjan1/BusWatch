@@ -8,7 +8,6 @@ import SessionDetails from "./SessionDetails";
 axios.defaults.withCredentials = true;
 
 const TeacherDashboard = () => {
-  //eslint-disable-next-line
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [sessionList, setSessionList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
@@ -16,13 +15,17 @@ const TeacherDashboard = () => {
   const [currentSession, setCurrentSession] = useState("");
   const navigate = useNavigate();
 
-  //update list of sessions
   const updateList = async () => {
     try {
       const response = await axios.post(
         "http://localhost:5050/sessions/getSessions",
         {
           token: token,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       setSessionList(response.data.sessions);
@@ -31,8 +34,27 @@ const TeacherDashboard = () => {
     }
   };
 
+  const handleDelete = async (busNumber) => {
+    if (!window.confirm(`Are you sure you want to delete ${busNumber}?`)) return;
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/sessions/deleteBusRecord",
+        { busNumber },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      alert(response.data.message);
+      updateList();
+    } catch (error) {
+      alert("Error deleting bus record");
+      console.error(error);
+    }
+  };
+
   const toggleSessionDetails = (e) => {
-    //get the session details that has session_id = e
     setCurrentSession(
       sessionList.filter((session) => {
         return session.session_id === e;
@@ -44,6 +66,7 @@ const TeacherDashboard = () => {
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
+
   useEffect(() => {
     if (token === "" || token === undefined) {
       navigate("/login");
@@ -55,12 +78,17 @@ const TeacherDashboard = () => {
 
   const FlashCard = ({ session }) => {
     return (
-      <div
-        className="flashcard"
-        onClick={() => toggleSessionDetails(session.session_id)}
-      >
-        <div className="front">
+      <div className="flashcard">
+        <div className="front" onClick={() => toggleSessionDetails(session.session_id)}>
           <h4>{session.name}</h4>
+        </div>
+        <div className="delete-button-container">
+          <button
+            className="delete-btn"
+            onClick={() => handleDelete(session.name)}
+          >
+            ❌
+          </button>
         </div>
       </div>
     );
@@ -80,19 +108,9 @@ const TeacherDashboard = () => {
       </div>
       <div className="session-list">
         {sessionList.length > 0 ? (
-          sessionList.map((session, index) => {
-            return (
-              <div
-                key={index + session.session_id}
-                className="flashcard"
-                onClick={() => {
-                  toggleSessionDetails(session.session_id);
-                }}
-              >
-                <FlashCard session={session} />
-              </div>
-            );
-          })
+          sessionList.map((session, index) => (
+            <FlashCard key={index + session.session_id} session={session} />
+          ))
         ) : (
           <p>No records found</p>
         )}

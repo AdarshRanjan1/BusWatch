@@ -6,6 +6,7 @@ import "../styles/SessionDetails.css";
 
 const SessionDetails = (props) => {
   const [qr, setQR] = useState("");
+  const [studentList, setStudentList] = useState([]);
 
   async function getQR() {
     await axios
@@ -20,13 +21,30 @@ const SessionDetails = (props) => {
         console.log(error);
       });
   }
+
+  async function fetchStudentList() {
+    try {
+      const res = await axios.post(
+        "http://localhost:5050/sessions/getStudentsByBus",
+        { busNumber: props.currentSession[0].name },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setStudentList(res.data.students);
+    } catch (err) {
+      console.error("❌ Error fetching student list:", err);
+    }
+  }
+
   const showImage = (e) => {
     let image = e.target.src;
     let imageWindow = window.open("", "_blank");
-    imageWindow.document.write(
-      `<img src=${image} alt="student" width="50%" />`
-    );
+    imageWindow.document.write(`<img src=${image} alt="student" width="50%" />`);
   };
+
   const copyQR = () => {
     navigator.clipboard.writeText(qr);
   };
@@ -40,10 +58,11 @@ const SessionDetails = (props) => {
 
   useEffect(() => {
     getQR();
-  });
+    fetchStudentList();
+  }, []);
 
   return (
-    <div className="popup">
+    <div className="popup" style={{ overflowY: "auto", maxHeight: "90vh" }}>
       <button onClick={props.toggleSessionDetails}>
         <strong>X</strong>
       </button>
@@ -53,24 +72,8 @@ const SessionDetails = (props) => {
             <p>
               <strong>Bus Number</strong>: {props.currentSession[0].name}
             </p>
-            {/* <p>
-              <strong>Date</strong>:{" "}
-              {props.currentSession[0].date.split("T")[0]}
-            </p>
             <p>
-              <strong>Time</strong>: {props.currentSession[0].time}
-            </p>
-            <p>
-              <strong>Duration</strong>:{" "}
-              {props.currentSession[0].duration}
-            </p>
-            <p>
-              <strong>Location</strong>:{" "}
-              {props.currentSession[0].location}
-            </p> */}
-            <p>
-              <strong>Radius</strong>: {props.currentSession[0].radius}{" "}
-              meters
+              <strong>Radius</strong>: {props.currentSession[0].radius} meters
             </p>
           </div>
           <div className="qr-code">
@@ -80,7 +83,34 @@ const SessionDetails = (props) => {
             </button>
           </div>
         </div>
-        <div className="student-list scrollable-content">
+
+        <div className="student-list scrollable-content" style={{ maxHeight: "150px", overflowY: "auto" }}>
+          <p>Students:</p>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Reg No</th>
+              </tr>
+            </thead>
+            <tbody>
+              {studentList.length > 0 ? (
+                studentList.map((s, i) => (
+                  <tr key={i}>
+                    <td>{s.name}</td>
+                    <td>{s.regno}</td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colSpan={2}>No students found</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ height: "20px" }}></div>
+
+        <div className="student-list scrollable-content" style={{ maxHeight: "300px", overflowY: "auto" }}>
           <p>Check-ins:</p>
           <table>
             <thead>
@@ -91,7 +121,6 @@ const SessionDetails = (props) => {
                 <th>Email</th>
                 <th>Time</th>
                 <th>Location</th>
-                {/* <th>Distance</th> */}
                 <th>Image</th>
               </tr>
             </thead>
@@ -103,30 +132,8 @@ const SessionDetails = (props) => {
                     <td>{student.IP}</td>
                     <td>{student.date.split("T")[0]}</td>
                     <td>{student.student_email}</td>
-                    <td>
-                      {student.time}
-                      {/* {props.currentSession[0].time} */}
-                    </td>
-                    <td>
-                      {props.currentSession[0].location}
-                    </td>
-                    {/* <th
-                      key={index + "6"}
-                      className="distance"
-                      style={{
-                        color: getDistance(
-                          student.distance,
-                          props.currentSession[0].radius
-                        ).color,
-                      }}
-                    >
-                      {
-                        getDistance(
-                          student.distance,
-                          props.currentSession[0].radius
-                        ).distance
-                      }
-                    </th> */}
+                    <td>{student.time}</td>
+                    <td>{props.currentSession[0].location}</td>
                     {student.image !== undefined ? (
                       <td>
                         <img

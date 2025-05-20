@@ -8,3 +8,4 @@ export { default as Nav } from "./Nav";
 export { default as NewSession } from "./NewSession";
 export { default as StudentDashboard } from "./StudentDashboard";
 export { default as ForgotPassword } from "./ForgotPassword";
+export { default as BusInchargeDashboard } from "./BusInchargeDashboard";

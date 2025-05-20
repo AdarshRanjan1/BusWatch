@@ -11,6 +11,8 @@ import {
   StudentDashboard,
   ForgotPassword,
 } from "./pages/Index";
+import BusInchargeDashboard from "./pages/BusInchargeDashboard";
+import QrScanner from "./pages/QrScanner";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ const router = createBrowserRouter([
         element: <StudentDashboard />,
       },
       {
+        path: "busincharge-dashboard", 
+        element: <BusInchargeDashboard />,
+      },
+      {
         path: "logout",
         element: <Logout />,
       },
@@ -48,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: "forgot-password",
         element: <ForgotPassword />,
+      },
+      {
+        path: "scan-qr",
+        element: <QrScanner />,
       },
       {
         path: "*",

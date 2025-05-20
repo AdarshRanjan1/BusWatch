@@ -1,21 +1,21 @@
-//create a new session component
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "../styles/StudentForm.css";
 
-const StudentForm = ({ togglePopup }) => {
-  //eslint-disable-next-line
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
+const StudentForm = ({ togglePopup, defaultBus, setAttendanceMessage }) => {
+  const [token] = useState(localStorage.getItem("token") || "");
   const [image, setImage] = useState({ contentType: "", data: "" });
-  const [photoData, setPhotoData] = useState(""); // To store the captured photo data
+  const [photoData, setPhotoData] = useState("");
   const videoRef = useRef(null);
 
-  const constraints = {
-    video: true,
-  };
+  useEffect(() => {
+    startCamera();
+    return () => stopCamera(); // Cleanup on unmount
+  }, []);
+
   const startCamera = () => {
     navigator.mediaDevices
-      .getUserMedia(constraints)
+      .getUserMedia({ video: true })
       .then((stream) => {
         videoRef.current.srcObject = stream;
       })
@@ -23,28 +23,31 @@ const StudentForm = ({ togglePopup }) => {
         console.error("Error accessing camera:", error);
       });
   };
-  const stopCamera = () => {
-    const stream = videoRef.current.srcObject;
-    const tracks = stream.getTracks();
 
-    tracks.forEach((track) => track.stop());
-    videoRef.current.srcObject = null;
+  const stopCamera = () => {
+    const stream = videoRef.current?.srcObject;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+      videoRef.current.srcObject = null;
+    }
   };
+
   const capturePhoto = async () => {
+    // Below if is extra 
+    if (!videoRef.current || !videoRef.current.videoWidth) {
+      alert("Camera not ready yet. Please wait a second and try again.");
+      return;
+    }
     const canvas = document.createElement("canvas");
     canvas.width = videoRef.current.videoWidth;
     canvas.height = videoRef.current.videoHeight;
-    canvas
-      .getContext("2d")
-      .drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
-
+    canvas.getContext("2d").drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
     const photoDataUrl = canvas.toDataURL("image/png");
-
     setImage(await fetch(photoDataUrl).then((res) => res.blob()));
-
     setPhotoData(photoDataUrl);
     stopCamera();
   };
+
   const ResetCamera = () => {
     setPhotoData("");
     startCamera();
@@ -52,118 +55,99 @@ const StudentForm = ({ togglePopup }) => {
 
   const AttendSession = async (e) => {
     e.preventDefault();
-    let regno = e.target.regno.value;
-  
-    // Get user IP address
+
+    // Get IP address
     axios.defaults.withCredentials = false;
     const res = await axios.get("https://api64.ipify.org?format=json");
     axios.defaults.withCredentials = true;
-  
     let IP = res.data.ip;
+
+    if (!defaultBus) return alert("No bus selected!");
+
     if (navigator.geolocation) {
-      console.log("Geolocation is supported!");
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
           let locationString = `${latitude},${longitude}`;
-  
-          if (regno.length > 0) {
-            const currentTime = new Date(); // Current time as Date object
-            const currentTimeString = currentTime.toLocaleTimeString(); // Current time as string
-            const thresholdTime = new Date(); // Threshold time set to 8:00 AM
-            thresholdTime.setHours(8, 0, 0, 0);
-  
-            const formData = {
-              token: token,
-              regno: regno,
-              session_id: localStorage.getItem("session_id"),
-              teacher_email: localStorage.getItem("teacher_email"),
-              IP: IP,
-              time: currentTimeString, // Current time
-              date: currentTime.toISOString().split("T")[0],
-              Location: locationString,
-              student_email: localStorage.getItem("email"),
-              image: image,
-            };
-  
-            // First, send the attendance data
+          const currentTime = new Date();
+          const currentTimeString = currentTime.toLocaleTimeString();
+
+          let studentsWithStatus = [];
+          try {
+            const response = await axios.post("http://localhost:5050/sessions/getStudentsByBus", {
+              busNumber: defaultBus,
+            });
+            studentsWithStatus = response.data.students.map((s) => ({
+              name: s.name,
+              regno: s.regno,
+              status: s.status || "present",
+            }));
+          } catch (err) {
+            console.error("❌ Error fetching students for attendance", err);
+          }
+          console.log("🧪 Debug form data:");
+          console.log("session_id:", localStorage.getItem("session_id"));
+          console.log("teacher_email:", localStorage.getItem("teacher_email"));
+          console.log("student_email:", localStorage.getItem("email"));
+
+          if (!localStorage.getItem("session_id") || !localStorage.getItem("teacher_email")) {
             try {
-              console.log("Sending data to server");
-              const response = await axios.post(
-                "http://localhost:5050/sessions/attend_session",
-                formData,
-                {
-                  headers: {
-                    "Content-Type": "multipart/form-data",
-                  },
-                }
-              );
-  
-              // Replace the contents of the popup with the server response
-              document.querySelector(
-                ".form-popup-inner"
-              ).innerHTML = `<h5>${response.data.message}</h5>`;
+              const sessionRes = await axios.post("http://localhost:5050/sessions/getLatestSessionForBus", {
+                busNumber: defaultBus,
+              }, {
+                headers: {
+                  Authorization: `Bearer ${token}`,
+                },
+              });
+          
+              const { session_id, teacher_email } = sessionRes.data;
+              localStorage.setItem("session_id", session_id);
+              localStorage.setItem("teacher_email", teacher_email);
             } catch (err) {
-              console.error("Error sending attendance data:", err);
+              console.error("❌ Error fetching session info:", err);
+              return alert("Unable to find session details. Try again or contact admin.");
             }
-  
-            // Then, check the time and send an email if necessary
-            if (currentTime > thresholdTime) {
-              // Define arrays of students and their registration numbers
-              const busMappings = {
-                "T12": [
-                  { name: "Adarsh Ranjan", regno: "21BCE5582" },
-                  { name: "Sydney Sweeney", regno: "21BCE1169" },
-                ],
-                "T10": [
-                  { name: "Apoorv D", regno: "21BCE1169" },
-                  { name: "Pete Davidson", regno: "21BCE6996" },
-                ],
-              };
-            
-              // Find the students mapped to the current bus number (regno in this case represents the bus number)
-              const studentsForBus = busMappings[regno] || [];
-            
-              // Create the student list string for the email content
-              const studentList = studentsForBus
-                .map((student) => `${student.name} (Reg: ${student.regno})`)
-                .join(", ");
-            
-              try {
-                console.log("Sending alert email as time is past 8:00 AM");
-                await axios.post(
-                  "http://localhost:5050/users/sendmail2", // API endpoint for sending email
-                  {
-                    email: "apoorv.d2021@vitstudent.ac.in",
-                    subject: "Late Bus Arrival Alert",
-                    message: `The Bus number- ${regno} arrived late at ${currentTimeString}.\n\nStudents in this bus: ${studentList}\n\nAdmin- BusWatch`,
-                  },
-                  {
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                  }
-                );
-                console.log("Email sent successfully");
-              } catch (err) {
-                console.error("Error sending email:", err);
+          }
+          const formData = {
+            token,
+            regno: defaultBus,
+            session_id: localStorage.getItem("session_id"),
+            teacher_email: localStorage.getItem("teacher_email"),
+            IP,
+            time: currentTimeString,
+            date: currentTime.toISOString().split("T")[0],
+            Location: locationString,
+            student_email: localStorage.getItem("email"),
+            image,
+            students: studentsWithStatus,
+          };
+
+          try {
+            const response = await axios.post(
+              "http://localhost:5050/sessions/attend_session",
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                },
               }
-            }
-          } else {
-            alert("Please fill all the fields");
+            );
+            setAttendanceMessage(response.data.message);
+            togglePopup(); // ✅ Close the popup
+            stopCamera();  // ✅ Stop the webcam
+          } catch (err) {
+            console.error("❌ Error sending attendance data:", err);
+            alert("Error submitting attendance");
           }
         },
         (error) => {
-          console.error("Error getting geolocation:", error);
+          console.error("Geolocation error:", error);
         }
       );
     } else {
       alert("Geolocation is not supported by this browser.");
-      console.error("Geolocation is not supported by this browser.");
     }
   };
-  
-  
 
   return (
     <div className="form-popup">
@@ -171,7 +155,7 @@ const StudentForm = ({ togglePopup }) => {
         <strong>X</strong>
       </button>
       <div className="form-popup-inner">
-        <h5>Enter Bus Details</h5>
+        <h5>Marking Attendance for Bus: {defaultBus}</h5>
         {!photoData && <video ref={videoRef} width={300} autoPlay={true} />}
         {photoData && <img src={photoData} width={300} alt="Captured" />}
         <div className="cam-btn">
@@ -181,13 +165,7 @@ const StudentForm = ({ togglePopup }) => {
         </div>
 
         <form onSubmit={AttendSession}>
-          <input
-            type="text"
-            name="regno"
-            placeholder="Bus Number"
-            autoComplete="off"
-          />
-          <button type="submit">Done</button>
+          <button type="submit">Submit Attendance</button>
         </form>
       </div>
     </div>

@@ -2,6 +2,7 @@
   font-size: 30px;
   height: 100vh;
   background: #f3f4f6;
+  /* background: linear-gradient(135deg, #ff7e5f, #feb47b); */
   display: flex;
   flex-direction: column;
   align-items: center;

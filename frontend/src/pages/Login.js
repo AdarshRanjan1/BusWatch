@@ -1,24 +1,3 @@
-// import React, { useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
-
-// const Login = () => {
-//   const navigate = useNavigate();
-
-//   // Automatically redirect to teacher dashboard
-//   useEffect(() => {
-//     navigate("/teacher-dashboard");  // Bypass login, direct navigation
-//   }, []);
-
-//   return (
-//     <div>
-//       <h2>Bypassing Login...</h2>
-//     </div>
-//   );
-// };
-
-// export default Login;
-
-
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SHA256 } from "crypto-js";
@@ -90,8 +69,10 @@ const Login = () => {
           } else {
             navigate("/student-dashboard");
           }
-        } else {
+        } else if (response.data.type === "teacher") {
           navigate("/teacher-dashboard");
+        } else if (response.data.type === "busincharge") {
+          navigate("/busincharge-dashboard");
         }
       } catch (err) {
         alert("Invalid email or password");
@@ -114,10 +95,15 @@ const Login = () => {
     } catch (err) {
       console.log("No query parameters");
     }
+  
     if (token !== "" && token !== undefined) {
-      if (localStorage.getItem("type") === "teacher") {
+      const userType = localStorage.getItem("type");
+  
+      if (userType === "teacher") {
         navigate("/teacher-dashboard");
-      } else {
+      } else if (userType === "busincharge") {
+        navigate("/busincharge-dashboard");
+      } else if (userType === "student") {
         if (session_id !== "" && teacher !== "") {
           navigate(
             "/student-dashboard?session_id=" + session_id + "&email=" + teacher
@@ -127,7 +113,8 @@ const Login = () => {
         }
       }
     }
-  }, [token]);
+  }, [token, navigate]);
+  
 
   return (
     <div className="login-main">

@@ -3,6 +3,7 @@ dotenv.config();
 import nodemailer from "nodemailer";
 import { Student } from "../model/Student.js";
 import { Teacher } from "../model/Teacher.js";
+import { BusIncharge } from "../model/BusIncharge.js";
 import JWT from "../middleware/JWT.js";
 
 //login
@@ -14,6 +15,10 @@ async function Login(req, res) {
   if (!user) {
     type = "teacher";
     user = await Teacher.findOne({ email });
+  }
+  if (!user) {
+    type = "busincharge";
+    user = await BusIncharge.findOne({ email });
   }
 
   if (user) {
@@ -37,16 +42,55 @@ async function Login(req, res) {
 // Create a new user
 async function Signup(req, res) {
   const { name, email, pno, dob, password, type } = req.body;
+
   if (type === "student") {
     const user = new Student({
-      name: name,
-      email: email,
-      pno: pno,
-      dob: dob,
-      password: password,
+      name,
+      email,
+      pno,
+      dob,
+      password,
     });
     try {
-      const existingUser = await Student.findOne({ email: email }).exec();
+      const existingUser = await Student.findOne({ email }).exec();
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      } else {
+        const newUser = await user.save();
+        res.status(201).json(newUser);
+      }
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  } else if (type === "teacher") {
+    const user = new Teacher({
+      name,
+      email,
+      pno,
+      dob,
+      password,
+    });
+    try {
+      const existingUser = await Teacher.findOne({ email }).exec();
+      if (existingUser) {
+        return res.status(400).json({ message: "User already exists" });
+      } else {
+        const newUser = await user.save();
+        res.status(201).json(newUser);
+      }
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  } else if (type === "busincharge") {
+    const user = new BusIncharge({
+      name,
+      email,
+      pno,
+      dob,
+      password,
+    });
+    try {
+      const existingUser = await BusIncharge.findOne({ email }).exec();
       if (existingUser) {
         return res.status(400).json({ message: "User already exists" });
       } else {
@@ -57,24 +101,7 @@ async function Signup(req, res) {
       res.status(400).json({ message: err.message });
     }
   } else {
-    const user = new Teacher({
-      name: name,
-      email: email,
-      pno: pno,
-      dob: dob,
-      password: password,
-    });
-    try {
-      const existingUser = await Teacher.findOne({ email: email }).exec();
-      if (existingUser) {
-        return res.status(400).json({ message: "User already exists" });
-      } else {
-        const newUser = await user.save();
-        res.status(201).json(newUser);
-      }
-    } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+    res.status(400).json({ message: "Invalid user type" });
   }
 }
 //change password
